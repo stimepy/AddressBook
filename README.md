@@ -13,7 +13,7 @@ Update to use SQLi  - Complete
 
 Remove any deprecated PHP code update to function as at least 7.4 aiming for 8.1.    - complete
 
-Get the entire thing running   - 90% of the way there.  Yea some stuff is broken  Will release as version 1.2
+Get the entire thing running   - 90% of the way there.  Yea some stuff is broken  Will release as version 1.2.01
 
 Saving/Updating  - Get composer loaded in.  InProgress
 
@@ -22,6 +22,8 @@ bring html into the modern html 5 era - Inprogress
 Flush out classes
 
 Define what the CSV actually Needs!  - Release as version 1.3
+
+build an input?
 
 Vcard support  https://github.com/jeroendesloovere/vcard as well as other exports?
 

@@ -1,9 +1,9 @@
 <?php
 /*************************************************************
- *  THE ADDRESS BOOK  :  version 1.2.1
+ *  THE ADDRESS BOOK  :  version 1.2
  *
  * Author: stimepy@aodhome.com
- * Last Modified: 4-18-2022
+ * Last Modified: 4-21-2022
  *****************************************************************
  *  register.php
  *  Registers new users
@@ -16,21 +16,19 @@ require_once('.\Core.php');
 global $globalUsers, $lang, $globalSqlLink;
 
 
-
 // ** RETRIEVE OPTIONS THAT PERTAIN TO THIS PAGE **
-	$options = new Options();
-	$mail = new PHPMailer();
-	$mail->CharSet = $lang['CHARSET'];        	
-	$mail->SetLanguage(LANGUAGE_CODE, "lib/phpmailer/language/");
-	$mail->From = 'noreply@'.$_SERVER['SERVER_NAME'];
-	$mail->FromName = 'noreply@'.$_SERVER['SERVER_NAME'];
+$options = new Options();
+
 
 // ** DENY ACCESS IF REGISTRATION IS NOT ALLOWED
 // If mode is "confirm", permission must be granted so that e-mail changes can be confirmed.
-	if (($options->getallowUserReg() != 1) && ($_GET['mode'] != "confirm")) {
-		reportScriptError("User registration has been turned off in this installation.");
-		exit();
-	}
+if (($options->getallowUserReg() != 1) && ($_GET['mode'] != "confirm")) {
+    echo "User registration has been turned off in this installation.";
+    http_redirect('index.php');
+    exit();
+}
+// if()
+
 	if($options->geteMailAdmin() == 1){
         $globalSqlLink->SelectQuery('*',TABLE_USERS, "usertype=\'admin\'", NULL);
         $admins = $globalSqlLink->FetchQueryResult();
@@ -43,7 +41,7 @@ global $globalUsers, $lang, $globalSqlLink;
 		$copyAdmins = "Yes";
 	}
 // initial message
-	$message = $lang[REG_NEW];
+	$message = $lang['REG_NEW'];
 
 	if ($_POST['registerSubmit'])  {	
 		global $feedback, $hidden_hash_var;
@@ -81,18 +79,19 @@ global $globalUsers, $lang, $globalSqlLink;
 						$feedback .= ' MySQL ERROR - '.mysql_error();
 					} else {
 						//send the confirm email 
-						$message = $lang[SALUTATION]." ".$_POST['username'].",\n".
-							$lang[REG_MAIL_MSG_1].
+						$message = $lang['SALUTATION']." ".$_POST['username'].",\n".
+							$lang['REG_MAIL_MSG_1'].
 							"\n\n  http://" .$_SERVER['HTTP_HOST'].dirname($_SERVER['REQUEST_URI']). "/register.php?mode=confirm&hash=$hash&email=$email".
-							"\n\n".$lang[REG_MAIL_MSG_2];
-						$mail->Subject = $lang[TAB].' - '.$lang[REG_CONFIRM_TITLE];			
-						$mail->Body  = $message ;				
+							"\n\n".$lang['REG_MAIL_MSG_2'];
+						$mail->Subject = $lang[TAB].' - '.$lang[REG_CONFIRM_TITLE];
+						$mail->Body  = $message ;
 						$mail->AddAddress($email);
 						if (!$mail->Send()) {
-							reportScriptError($lang['ERR_MAIL_NOT_SENT'] . $mail->ErrorInfo);
+							die($lang['ERR_MAIL_NOT_SENT'] . $mail->ErrorInfo);
 						}else{
 							$feedback = "ERR_USER_REGISTER_SUCCESS";
-						}	
+						}
+
 					} //end if !$result
 				} // end if $result num rows
 			} else {
@@ -116,7 +115,7 @@ global $globalUsers, $lang, $globalSqlLink;
 			//$result=mysql_query($sql, $db_link);
 			if (!is_array($result)  || $globalSqlLink->getRowCount() < 1) {
 				//no matching user found
-				$message = $lang[ERR_USER_INCORRECT_NAME_OR_EMAIL];
+				$message = $lang['ERR_USER_INCORRECT_NAME_OR_EMAIL'];
 			}
 			else {
 				//create a secure, new password
@@ -127,7 +126,7 @@ global $globalUsers, $lang, $globalSqlLink;
                 $globalSqlLink->UpdateQuery($update,TABLE_USERS, "username='$username'" );
 				//$result=mysql_query($sql, $db_link);
 				//send a simple email with the new password
-				$mail->Subject = $lang[MAIL_LOST_PASSWORD_SUBJECT];		
+			/*	$mail->Subject = $lang[MAIL_LOST_PASSWORD_SUBJECT];
 				$mail->Body  = $lang[MAIL_LOST_PASSWORD_MESSAGE]. "\n".$new_pass;
 				$mail->AddAddress($email);
 				if (!$mail->Send()) {
@@ -136,10 +135,11 @@ global $globalUsers, $lang, $globalSqlLink;
 				else{
 					$message = $lang[ERR_USER_REGISTER_SUCCESS];	
 				}
-				$message = $lang[ERR_USER_NEW_PASSWORD];
+			*/
+				$message = $lang['ERR_USER_NEW_PASSWORD'];
 			}
 		} else {
-			$message = $lang[ERR_USER_REQUIRED_NAME_OR_EMAIL];
+			$message = $lang['ERR_USER_REQUIRED_NAME_OR_EMAIL'];
 		}
 	}
 
@@ -153,7 +153,7 @@ global $globalUsers, $lang, $globalSqlLink;
 ?>
 <HTML>
 <HEAD>
-	<TITLE><?php echo $lang[TITLE_REGISTER].$lang[TITLE_TAB]; ?></TITLE>
+	<TITLE><?php echo $lang['TITLE_REGISTER'].$lang['TITLE_TAB']; ?></TITLE>
 	<LINK REL="stylesheet" HREF="lib/Stylesheet/styles.css" TYPE="text/css">
 	<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
 	<META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
@@ -175,33 +175,33 @@ global $globalUsers, $lang, $globalSqlLink;
 	echo($message);
 ?></TD></TR>
 <?php
-	if ($_GET['mode'] != "confirm" ) {
+	// if ($_GET['mode'] != "confirm" ) {
 
 ?>
 	<TR>
 		<TD CLASS="data"><CENTER>
-		<!----FORM NAME="register" METHOD="post" ACTION="<?php echo FILE_REGISTER."?login=OK"?>">
+		<FORM NAME="register" METHOD="post" ACTION="<?php echo FILE_REGISTER."?login=OK"?>">
 		<FORM NAME="register" METHOD="post" ACTION="<?php echo FILE_REGISTER?>">
 		<BR>
-		<P><B><?php echo $lang[LBL_USERNAME]; ?></B>
+		<P><B><?php echo $lang['LBL_USERNAME']; ?></B>
 		<BR><INPUT TYPE="text" SIZE=20 CLASS="formTextbox" NAME="username">
-		<P><B><?php echo $lang[LBL_EMAIL]; ?></B>
+		<P><B><?php echo $lang['LBL_EMAIL']; ?></B>
 		<BR><INPUT TYPE="text" SIZE=20 CLASS="formTextbox" NAME="email">		
-		<P><B><?php echo $lang[LBL_PASSWORD]; ?></B>
+		<P><B><?php echo $lang['LBL_PASSWORD']; ?></B>
 		<BR><INPUT TYPE="password" SIZE=20 CLASS="formTextbox" NAME="password1">		
-		<P><B><?php echo $lang[LBL_PASSWORD_REPEAT]; ?></B>
+		<P><B><?php echo $lang['LBL_PASSWORD_REPEAT']; ?></B>
 		<BR><INPUT TYPE="password" SIZE=20 CLASS="formTextbox" NAME="password2">
 
-		<P><INPUT TYPE="submit" CLASS="formButton" NAME="registerSubmit" VALUE="<?php echo  $lang[BTN_REGISTER]; ?>">
-		<P><INPUT TYPE="submit" CLASS="formButton" NAME="lost" VALUE="<?php echo  $lang[BTN_LOST]; ?>">
-		<P><A HREF="<?php echo(FILE_INDEX); ?>"><?php echo  $lang[BTN_CANCEL]?></A>
+		<P><INPUT TYPE="submit" CLASS="formButton" NAME="registerSubmit" VALUE="<?php echo  $lang['BTN_REGISTER']; ?>">
+		<P><INPUT TYPE="submit" CLASS="formButton" NAME="lost" VALUE="<?php echo  $lang['BTN_LOST']; ?>">
+		<P><A HREF="<?php echo(FILE_INDEX); ?>"><?php echo  $lang['BTN_CANCEL']?></A>
 
 		</FORM>
 		<BR><BR><BR><BR><BR>
 		</CENTER></TD>
 	</TR>
 <?php
-	}
+	// }
 	printFooter();
 ?>
 </TBODY>

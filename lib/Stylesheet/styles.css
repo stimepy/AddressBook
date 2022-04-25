@@ -150,3 +150,16 @@ A:hover{
 	font-family: Tahoma, sans-serif;
 	font-size: 11px;
 }
+
+.button {
+/* not using yet but soon */
+	border: none;
+	color: blue;
+	padding: 20px 34px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 20px;
+	margin: 4px 2px;
+	cursor: pointer;
+}

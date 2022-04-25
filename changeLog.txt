@@ -1,3 +1,6 @@
+Releasse 1.2
+1. Language table added, references the langauge files.  (Requires DB upgrade)
+2. Made php 7.4 compadible
 
 	
 

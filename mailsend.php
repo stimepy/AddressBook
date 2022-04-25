@@ -15,7 +15,7 @@
 
 require_once('.\lib\Core.php');
 
-global $globalUsers;
+global $globalUsers, $lang;
 
 
 
@@ -28,7 +28,7 @@ $globalUsers->checkForLogin('admin','user');
 
 // ** GET SOME INFORMATION **
 	if(empty($_POST['mail_from'])) {
-		reportScriptError($lang['ERR_MAIL_NO_SENDER']);
+		die($lang['ERR_MAIL_NO_SENDER']);
 	}
 
 
@@ -72,7 +72,7 @@ $globalUsers->checkForLogin('admin','user');
 
 //      ** SEND! **
 	if (!$mail->Send()) {
-		reportScriptError($lang['ERR_MAIL_NOT_SENT'] . $mail->ErrorInfo);
+		die($lang['ERR_MAIL_NOT_SENT'] . $mail->ErrorInfo);
 	}
 	
 ?>

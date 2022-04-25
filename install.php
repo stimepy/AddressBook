@@ -1,9 +1,9 @@
 <?php
 /*************************************************************
- *  THE ADDRESS BOOK  :  version 1.2
+ *  THE ADDRESS BOOK  :  version 1.2.01
  *
  * Author: stimepy@aodhome.com
- * Last Modified: 4-19-2022
+ * Last Modified: 4-24-2022
  ****************************************************************
  *
  *  install.php
@@ -12,18 +12,17 @@
  *************************************************************/
 
 error_reporting  (E_ERROR | E_WARNING | E_PARSE);
-require_once('.\Install\Install.Core.php');
-
+require_once(".\Install\Install.Core.php");
 require_once (".\Install\Install.Template.php");
+
 $installtemplate = new Install();
 global $lang;
 
-$output = $installtemplate ->CommonBodyStart($lang);
+$output = $installtemplate ->CommonBodyStart( $lang['title'], $lang['charset'] );
 $post = 1;
-if(!empty($_POST["installStep"])){
-    $post = $_POST["installStep"];
-}
-switch($post){
+
+
+switch($installtemplate->getPost('installStep')){
     case 2:
        $installtemplate->checkDB();
        $installtemplate->installData();
@@ -35,6 +34,6 @@ switch($post){
         break;
 }
 
-$output .= $installtemplate->CommonBodyend();
+$output .= $installtemplate->CommonBodyEnd($lang);
 display($output);
 

@@ -23,9 +23,8 @@ $globalUsers->checkForLogin('admin');
 	$options = new Options();
 
 // ** DENY ACCESS IF UPLOAD IS NOT ALLOWED
-	if (($options->picAllowUpload != 1) && ($_SESSION['usertype'] != "admin")) {
-		reportScriptError("File uploading has been turned off in this installation.");
-		exit();
+	if (($options->getpicAllowUpload() != 1) && ($_SESSION['usertype'] != "admin")) {
+		die("File uploading has been turned off in this installation.");
 	}
 
 // ** BEGIN

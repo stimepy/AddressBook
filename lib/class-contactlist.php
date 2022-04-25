@@ -62,7 +62,7 @@ class ContactList {
 		elseif ($this->group_id == 2) {
 			// Admin check
 			if ($_SESSION['usertype'] != "admin") {
-				reportScriptError("URL tampering detected.");
+				die("URL tampering detected.");
 				exit();
 			}
 			$this->group_name = $lang['GROUP_HIDDEN_LABEL']; // "Hidden Entries"

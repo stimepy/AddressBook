@@ -176,7 +176,7 @@ class Options {
 
 		$globalSqlLink->UpdateQuery( $updates , TABLE_OPTIONS, '');
 		if($globalSqlLink->GetRowCount() == 0){
-			die(reportSQLError($lang['ERR_OPTIONS_NO_SAVE']));
+			die($lang['ERR_OPTIONS_NO_SAVE']);
 		}
 		//mysql_query($sql, $db_link)
 			//or die(reportSQLError($lang['ERR_OPTIONS_NO_SAVE']));
@@ -218,7 +218,7 @@ class Options {
 
 		$globalSqlLink->UpdateQuery($updates, TABLE_USERS,  "username='" . $_SESSION['username']."'");
 		if($globalSqlLink->GetRowCount() == 0){
-			die(reportSQLError($lang['ERR_OPTIONS_NO_SAVE']));
+			die($lang['ERR_OPTIONS_NO_SAVE']);
 		}
 		//mysql_query($sql, $db_link)
 		//	or die(reportSQLError($lang['ERR_OPTIONS_NO_SAVE']));
@@ -248,7 +248,7 @@ class Options {
 		//		WHERE username='" . $_SESSION['username'] . "'";
 		$globalSqlLink->UpdateQuery($updates, TABLE_USERS,  "username='" . $_SESSION['username']."'");
 		if($globalSqlLink->GetRowCount() == 0){
-			die(reportSQLError($lang['ERR_OPTIONS_NO_SAVE']));
+			die($lang['ERR_OPTIONS_NO_SAVE']);
 		}
 		// mysql_query($sql, $db_link)
 		//	or die(reportSQLError($lang['ERR_OPTIONS_NO_SAVE']));
@@ -261,21 +261,25 @@ class Options {
 	}
 		
 	function load_lang($file) {
-		global $php_ext;
-		// The following variables are loaded from country files. Make these global scope
-		global $lang;
-		global $country;
-		
+		global $php_ext, $additionalLang, $lang, $country;
+
+
 		$fullpath = dirname($_SERVER['SCRIPT_FILENAME']) . '/' . PATH_LANGUAGES . $file . '.' . $php_ext;
 		// This function takes the value returned by the 'language' column in global or user options table,
 		// and checks to make sure that the file exists in the /language directory. If it exists, it loads
 		// the language into memory. If it does not exist, it attempts to loads 'english' (the default language).
 		if (file_exists($fullpath)) {
 			require_once($fullpath);
+            require_once ("./languages/common.php");
+            $lang = mergeLanguagearrays($lang,$additionalLang);
+            unset($additionalLang);
 			return $file;
 		} else {
 			require_once(dirname($_SERVER['SCRIPT_FILENAME']) . '/' . PATH_LANGUAGES . 'english.' . $php_ext);
 			$this->message = $lang['OPT_LANGUAGE_MISSING'];
+            require_once ("./languages/common.php");
+            $lang = mergeLanguagearrays($lang,$additionalLang);
+            unset($additionalLang);
 			return 'english';
 		}
 	}

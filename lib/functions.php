@@ -1,33 +1,20 @@
 <?php
 /*************************************************************
- *  THE ADDRESS BOOK  :  version 1.04d
- *  
- * 
-  *************************************************************
+ *  THE ADDRESS BOOK  :  version 1.2
+ *
+ * Author: stimepy@aodhome.com
+ * Last Modified: 4-24-2022
+ ****************************************************************
  *  functions.php
  *  Defines functions to be used within other scripts.
  *
  *************************************************************/
-// session_start();
-// Deprecated  2022
-function chronometer($msg) {
-global $elapsed;
-global $CHRONO_STARTTIME;
-	$now = microtime(TRUE);
-	if ($CHRONO_STARTTIME > 0){
-		$elapsed = "$msg: ".round($now * 1000 - $CHRONO_STARTTIME * 1000, 3)." milli seconds";
-		$CHRONO_STARTTIME = 0;
-	return $elapsed;
-	}else {
-		$CHRONO_STARTTIME = $now;
- 	}
- } 
- 
+
 
 # Following are registration/mail functions formerly found in /lib/userfunctions
 ## ########////////////*********            programming note - all values for feedback eventually need to be names of $lang[] array NAMES
 // USED @ confirm page, accessed via confirmation e-mail
-
+//todo: move back to users
 function user_confirm($hash,$email) { 
 	global $feedback, $hidden_hash_var, $globalSqlLink;
 	//verify that they didn't tamper with the email address - David temporarily put != where = was due to error troubleshooting.
@@ -57,6 +44,8 @@ function user_confirm($hash,$email) {
 	}
 }
 
+//Will double check may need to just move into a registration class or something
+// will need to make more robust
 function account_pwvalid($pw) {
 	global $feedback;
 	if (strlen($pw) < 4) {
@@ -66,6 +55,7 @@ function account_pwvalid($pw) {
 	return true;
 }
 
+//Will double check may need to just move into a registration class or something
 function account_namevalid($name) {
 	global $feedback;
 	// no spaces
@@ -108,18 +98,26 @@ function account_namevalid($name) {
 	return true;
 }
 
+
+// Email validation is super hard...  may need to drop this.  we shall see.
+//Will double check may need to just move into a registration class or something?  or expand usage
 function validate_email ($address) {
 	return (preg_match('/^[-!#$%&\'*+\\./0-9=?A-Z^_`a-z{|}~]+'. '@'. '[-!#$%&\'*+\\/0-9=?A-Z^_`a-z{|}~]+\.' . '[-!#$%&\'*+\\./0-9=?A-Z^_`a-z{|}~]+$/', $address));
 }
 ## end registration/mail functions
 
 
+// Just an array merge to merge in common properties so they don't need to always be updated.
+function mergeLanguagearrays($array1, $array2){
+    return array_merge($array1, $array2);
+}
 
 
 //
 // CHECK ID - check_id();
 // Checks to see if an variable 'id' has been passed to the document, via GET or POST.
 // In addition, it checks to see if the 'id' corresponds to an entry already in the database, or else returns an error.
+//todo: move back to users
 function check_id() {
 	global $globalSqlLink;
 	global $lang;
@@ -143,117 +141,8 @@ function check_id() {
 // underscore _ character. If it does not, it returns false.
 //
 function isAlphaNumeric($string) {
-	if (preg_match("/[^a-z,A-Z,0-9_]/", $string) == 0) {
-		return true;
-	}
-	else {
-		return false;
-	}
+	return ctype_alnum($string);
 }
-
-
-
-
-
-
-
-
-
-// Deprcated  2022
-// SCRIPT ERROR MESSAGE - reportScriptError();
-// If an error is encountered, report it to the user and halt further execution of script.
-//
-function reportScriptError($msg) {
-?>
-<html>
-<head>
-	<title>Address Book - Error</title>
-	<link rel="stylesheet" href="Stylesheet/styles.css" type="text/css">
-	<meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
-	<meta http-equiv="PRAGMA" content="NO-CACHE">
-	<meta http-equiv="EXPIRES" content="-1">
-</head>
-
-<body>
-
-<p>
-<b><font style="color:#FF0000;"><?php echo $lang['ERROR_ENCOUNTERED']?></font></b> 
-
-<p>The following error occurred:
-
-<div class="error"><?php echo($msg); ?></div>
-
-<p>
-If necessary, please press the BACK button on your browser to return to the previous screen and correct any possible mistakes.
-<br>If you still need help, or you believe this to be a bug, please consult the <a href="http://www.corvalis.net/phpBB2/" target="_blank">Tech Support forums</a>.
-
-
-<p>
-<table border=0 cellpadding=0 cellspacing=0 width=570>
-<tbody>
-<?php
-	printFooter();
-?>
-</tbody>
-</table>
-
-</body>
-</html>
-<?php
-	// and then exit the script
-	exit();
-}
-// end
-
-
-
-
-//Deprecate 2022
-// SQL ERROR MESSAGE - reportSQLError();
-// If an error is encountered, report it to the user and halt further execution of script.
-//
-function reportSQLError() {
-
-?>
-<html>
-<head>
-	<title>Address Book - Error</title>
-	<link rel="stylesheet" href="Stylesheet/styles.css" type="text/css">
-	<meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
-	<meta http-equiv="PRAGMA" content="NO-CACHE">
-	<meta http-equiv="EXPIRES" content="-1">
-</head>
-<body>
-
-<p>
-<b><font style="color:#FF0000;">The Address Book has encountered a problem.</font></b> 
-
-<p>MySQL returned the following error message:
-
-<div class="error"><?php echo("MySQL error number " . mysql_errno() . ": " . mysql_error()); ?></div>
-
-<p>
-If necessary, please press the BACK button on your browser to return to the previous screen and correct any possible mistakes.
-<br>If you still need help, or you believe this to be a bug, please consult the <a href="http://www.corvalis.net/phpBB2/" target="_blank">Tech Support forums</a>.
-
-<P>
-
-<table border=0 cellpadding=0 cellspacing=0 width=570>
-<tbody>
-<?php
-	printFooter();
-?>
-</tbody>
-</table>
-
-</body>
-</html>
-<?php
-	// and then exit the script
-	exit();
-}
-// end
-
 
 // END OF FILE
-?>
+

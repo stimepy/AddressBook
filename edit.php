@@ -70,7 +70,7 @@ else {
         $_SESSION = array();
         session_destroy();
         // if this happens we need to log this betters....  todo for future.
-        reportScriptError("URL tampering detected. You have been logged out.");
+        die("URL tampering detected. You have been logged out.");
     }
 
 	// ADDRESSES

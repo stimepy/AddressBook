@@ -55,12 +55,10 @@ define('TABLE_WEBSITES', $db_prefix . 'websites');
 session_start();
 
 // Open Database Connection
-if(is_null($upgrade) == true) {
-    global $globalSqlLink;
+global $globalSqlLink;
+$globalSqlLink = new Mysql_Connect_I($db_hostname, $db_name, $db_username, $db_password);
+$globalUsers = new users();
 
-    $globalSqlLink = new Mysql_Connect_I($db_hostname, $db_name, $db_username, $db_password);
-    $globalUsers = new users();
-}
 
 //clear these, they are no longer needed.
 $db_hostname = $db_name = $db_username = $db_password = NULL;

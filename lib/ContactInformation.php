@@ -84,7 +84,7 @@ class ContactInformation {
         if($globalSqlLink->GetRowCount() > 0) {
             return $tbl_birthday['birthday'];
         }
-        die(reportSQLError());
+        die('nope!');
 
     }
 

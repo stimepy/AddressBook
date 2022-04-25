@@ -28,7 +28,7 @@ class users
         $globalSqlLink->SelectQuery( 'requireLogin', TABLE_OPTIONS, NULL, 'LIMIT 1');
         $requireLogin = $globalSqlLink->FetchQueryResult();
         if($requireLogin == -1) {
-            die(reportScriptError("Unable to retrieve options in authorization check."));
+            die("Unable to retrieve options in authorization check.");
         }
 
         //No login required I guess
@@ -159,7 +159,7 @@ class users
         global $glob1alSqlLink, $lang;
 
         if (empty($_GET['id'])) {
-            return ReportScriptError($lang['ERR_USERNAME_NONE']);
+           die($lang['ERR_USERNAME_NONE']);
         }
         // Check to see if user exists in the database
         // $sql = "SELECT username, usertype FROM ". TABLE_USERS ." WHERE id=". $_GET['id'] ." LIMIT 1";
@@ -167,7 +167,7 @@ class users
         $deluser = FetchQueryResult();
         //	or die(ReportSQLError($sql));
         if ($glob1alSqlLink->GetRowCount()<1) {
-            ReportScriptError($lang['ERR_USERNAME_NON_EXIST']);
+            die($lang['ERR_USERNAME_NON_EXIST']);
             return '';
         }
         // Get the username and type
@@ -245,7 +245,7 @@ class users
                 $mail->Body  = $message ;
                 $mail->AddAddress($new_email);
                 if (!$mail->Send()) {
-                    reportScriptError($lang['ERR_MAIL_NOT_SENT'] . $mail->ErrorInfo);
+                    die($lang['ERR_MAIL_NOT_SENT'] . $mail->ErrorInfo);
                 }else{
                     $feedback = $lang['MSG_EMAIL_CHANGED'];
                 }

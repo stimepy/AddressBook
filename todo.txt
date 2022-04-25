@@ -1,5 +1,6 @@
 Get the entire thing running
 	Saving/Updating  - Get composer loaded in.
+Get Langauges so they show correctly Or delete them.
 bring html into the modren html 5 era
 Flush out a contact class
 Define what the CSV actually Needs!
