@@ -21,6 +21,10 @@ require_once ('.\lib\Templates\mail.Template.php');
 
 global $globalSqlLink, $globalUsers, $lang;
 
+if(!empty()) {
+    die($lang['ERR_MAIL_NO_SENDER']);
+}
+
 $myTemplate = new mailTemplate();
 // ** CHECK FOR LOGIN **
 $globalUsers->checkForLogin('admin','user');
@@ -28,6 +32,8 @@ $globalUsers->checkForLogin('admin','user');
 // ** RETRIEVE OPTIONS THAT PERTAIN TO THIS PAGE **
 $options = new Options();
 $list = new ContactList($options);
+
+$myTemplate ->sendMail($_POST['mail_from']);
 
 // ** GET DESTINATION EMAIL ADDRESS **
 // If there is an e-mail address either via POST or GET we will e-mail to that single address.

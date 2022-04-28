@@ -1,7 +1,10 @@
 <?php
 /*************************************************************
- *  THE ADDRESS BOOK  :  version 1.04
- *  
+ *  THE ADDRESS BOOK  :  version 1.2.01
+ *
+ * Author: stimepy@aodhome.com
+ * Last Modified: 4-27-2022
+ ****************************************************************
  *  scratchpad.php
  *  Temporary placeholder for notes and such.
  *
@@ -10,27 +13,19 @@
 
 // ** GET CONFIGURATION DATA **
 require_once('.\Core.php');
+require_once("./lib/Templates/scratchpad.Template.php");
 
-global $globalSqlLink, $globalUsers, $lang;
+global $globalSqlLink, $globalUsers, $lang, $fileUrl, $paths;
 
 $globalUsers->checkForLogin();
 
 // ** RETRIEVE OPTIONS THAT PERTAIN TO THIS PAGE **
 $options = new Options();
 
-
+$output = webheader($lang[TITLE_TAB]." - ".$lang[TITLE_SCRATCH], $lang['CHARSET']);
 ?>
-<HTML>
-<HEAD>
-  <TITLE><?php echo "$lang[TITLE_TAB] - $lang[TITLE_SCRATCH]"?></TITLE>
-  <LINK REL="stylesheet" HREF="lib/Stylesheet/styles.css" TYPE="text/css">
-  <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $lang['CHARSET']?>">
-  <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
-  <META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
-  <META HTTP-EQUIV="EXPIRES" CONTENT="-1">
-</HEAD>
 
-<BODY>
+
 
 <?php
 // CHECK TO SEE IF A FORM HAS BEEN SUBMITTED, AND SAVE THE SCRATCHPAD.
@@ -46,66 +41,14 @@ $options = new Options();
 
         echo($lang[SCRATCH_SAVED]."\n");
 /*
-        echo("<P><A HREF=\"" . FILE_LIST . "\"><B>Return to List</B></A>\n");
-        echo("</BODY>");
-        echo("</HTML>");
-        exit();
+
 */
     }
-    
-    
-?>
 
-
-<SCRIPT LANGUAGE="JavaScript">
-<!--
-
-function saveEntry() {
-  //CONFIRMATION DISABLED.
-  //if (confirm('Are you sure you want to save?\nChanges cannot be undone.')) {
-    document.Scratchpad.submit();
-  //}
-}
-
-// -->
-</SCRIPT>
-
-
-<FORM NAME="Scratchpad" ACTION="<?php echo(FILE_SCRATCHPAD); ?>" METHOD="post">
-<INPUT TYPE="hidden" NAME="saveNotes" VALUE="YES">
-
-<CENTER>
-<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=570>
-  <TR>
-    <TD CLASS="navMenu">
-      <A HREF="#edit"><?php echo $lang['BTN_EDIT']?></A>
-      <A HREF= "<?php echo FILE_LIST?>"><?php echo $lang['BTN_LIST']?></A>
-    </TD>
-  </TR>
-  <TR>
-    <TD CLASS="headTitle">
-       <?php echo $lang['TITLE_SCRATCH']?>
-    </TD>
-  </TR>
-  <TR>
-    <TD CLASS="infoBox">
-
-        <TABLE BORDER=0 CELLSPACING=0 CELLPADDING=5 WIDTH=560>
-           <TR VALIGN="top">
-              <TD CLASS="data">
-                 <?php echo $lang['SCRATCH_HELP']?>
-              </TD>
-           </TR>
-           <TR VALIGN="top">
-              <TD WIDTH=550 CLASS="listDivide">&nbsp;</TD>
-           </TR>
-           <TR VALIGN="top">
-              <TD WIDTH=550 CLASS="data">
-<?php
 // DISPLAY CONTENTS OF SCRATCHPAD.
 
     // Retrieve data
-    $globalSqlLink->SelectQuery('notes',TABLE_SCRATCHPAD, NULL, "limit 1" );
+    $globalSqlLink->SelectQuery('notes',TABLE_SCRATCHPAD, "id = 1", "limit 1" );
     $notes = $globalSqlLink->fetchQueryResult();
     //$notes = mysql_query("SELECT notes FROM " . TABLE_SCRATCHPAD . " LIMIT 1", $db_link);
     //$notes = mysql_fetch_array($notes);
@@ -119,7 +62,6 @@ function saveEntry() {
     //while (each($displayArray)) {
     $z=sizeof($displayArray);
     //}
-    reset($displayArray);
 
     // Grab each line of the array and display it
     for ($a = 0; $a < $z; $a++) {

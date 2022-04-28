@@ -40,7 +40,7 @@ $globalUsers->checkForLogin('admin', 'user');
 <HTML>
 <HEAD>
 	<TITLE>Address Book - Other Phone Numbers</TITLE>
-	<LINK REL="stylesheet" HREF="lib/Stylesheet/styles.css" TYPE="text/css">
+	<LINK REL="stylesheet" HREF="../lib/Stylesheet/styles.css" TYPE="text/css">
 </HEAD>
 
 <BODY>

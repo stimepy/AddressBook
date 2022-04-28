@@ -10,9 +10,23 @@
  *
  *************************************************************/
 
+
 class mailTemplate{
+    private $sendMail;
+
     public function __construct()
     {
+        require_once("./lib/Mail.php");
+        $this->sendMail = new Correspondence();
+    }
+
+    public function sendMail($MailPost, $option){
+        // If we want
+        if(empty($_POST[$MailPost])){
+            return;  // Nothing to do, go back;
+        }
+        return $this->sendMail->CreateSendPost();
+
     }
 
     public function createMailToTemplate($body, $lang, $list){
@@ -47,7 +61,7 @@ class mailTemplate{
 			<br>
 			<CENTER>
 			<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=10 WIDTH=560>
-			    <FORM NAME=\"mail_form\" METHOD=\"post\" ACTION=\"". $body['FILE_MAILSEND']."\">";
+			    <FORM NAME=\"mail_form\" METHOD=\"post\" ACTION=\"". $body['FILE_MAILTO']."\">";
 
         if (empty($body['mail_to'])) {
             $output .= $this->contactsEmail($body,$list,$lang);

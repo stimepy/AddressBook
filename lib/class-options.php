@@ -261,23 +261,22 @@ class Options {
 	}
 		
 	function load_lang($file) {
-		global $php_ext, $additionalLang, $lang, $country;
+		global $additionalLang, $lang, $fileUrl, $paths;
+        require_once ("./languages/common.php");
 
-
-		$fullpath = dirname($_SERVER['SCRIPT_FILENAME']) . '/' . PATH_LANGUAGES . $file . '.' . $php_ext;
+		$fullpath = dirname($_SERVER['SCRIPT_FILENAME']) . '/' . $paths['PATH_LANGUAGES'] . $file . '.php';
 		// This function takes the value returned by the 'language' column in global or user options table,
 		// and checks to make sure that the file exists in the /language directory. If it exists, it loads
 		// the language into memory. If it does not exist, it attempts to loads 'english' (the default language).
+
 		if (file_exists($fullpath)) {
 			require_once($fullpath);
-            require_once ("./languages/common.php");
             $lang = mergeLanguagearrays($lang,$additionalLang);
             unset($additionalLang);
 			return $file;
 		} else {
-			require_once(dirname($_SERVER['SCRIPT_FILENAME']) . '/' . PATH_LANGUAGES . 'english.' . $php_ext);
+			require_once(dirname($_SERVER['SCRIPT_FILENAME']) . '/' . $paths['PATH_LANGUAGES'] . 'english.php');
 			$this->message = $lang['OPT_LANGUAGE_MISSING'];
-            require_once ("./languages/common.php");
             $lang = mergeLanguagearrays($lang,$additionalLang);
             unset($additionalLang);
 			return 'english';
