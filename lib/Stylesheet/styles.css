@@ -27,6 +27,15 @@ A:hover{
 	text-align: right;
 	padding-bottom: 3px;
 }
+.navMenu550{
+	font-family: Tahoma, sans-serif;
+	font-size: 11px;
+	font-weight: bold;
+	color: #0088EE;
+	text-align: right;
+	padding-bottom: 3px;
+	width: 550px;
+}
 .headTitle{
 	background-color: #000000;
 	color: #FFFFFF;
@@ -119,6 +128,18 @@ tr td{
 	padding-top: 10px;
 	padding-bottom: 2px;
 }
+
+.listHeader550{
+	font-family: Tahoma, sans-serif;
+	font-size: 14pt;
+	font-weight: bold;
+	color: #000000;
+	border-bottom: 1px solid #AAAAAA;
+	padding-top: 10px;
+	padding-bottom: 2px;
+	width: 550px;
+}
+
 .listDivide			{
 	font-family: Tahoma, sans-serif;
 	font-size: 1px;
@@ -184,15 +205,21 @@ tr td{
 	font-size: 11px;
 }
 
-.button {
-/* not using yet but soon */
+.urlButton {
+	background-color: #FFFFFF;
 	border: none;
-	color: blue;
-	padding: 20px 34px;
-	text-align: center;
-	text-decoration: none;
-	display: inline-block;
-	font-size: 20px;
-	margin: 4px 2px;
+	color: #0066CC;
+	padding: 2px 2px;
+	margin: 1px 1px;
 	cursor: pointer;
+	font-family: Tahoma, sans-serif;
+	text-decoration: none;
+	font-size: 11px;
+	font-weight: bold;
+	text-align: center;
+	display: inline-block;
+}
+
+Button[type=submit]:hover{
+	text-decoration:underline;
 }

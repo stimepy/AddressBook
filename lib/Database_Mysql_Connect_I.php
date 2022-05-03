@@ -128,7 +128,7 @@ class Mysql_Connect_I
         }
         $this->SetRowCount($this->mySQLConnection->affected_rows);
         //Clear Results;
-        $this->mySQLConnection->free();
+        // $this->mySQLConnection->free();
     }
 
     /**

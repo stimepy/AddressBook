@@ -21,6 +21,7 @@ class addressTemplate{
      * @return string
      */
     function addressBodyStart($body, $lang) {
+        $useBreak = true;
         $output = "
        <BODY>
            <div style='text-align: center'>
@@ -36,23 +37,28 @@ class addressTemplate{
         }
 
         $output .= "<A HREF=\"" . $body['FILE_ADDRESS'] . "?id= " . $body['prev'] . "\"> " . $body['BTN_PREVIOUS'] . "</A>
-        <A HREF=\"" . $body['FILE_ADDRESS'] . "?id=" . $body['next'] . "\"> " . $body['BTN_NEXT'] . "</A>
-    
-        " . $body['displayAsPopup'] . "
-        
-        
-                </TD>
+        <A HREF=\"" . $body['FILE_ADDRESS'] . "?id=" . $body['next'] . "\"> " . $body['BTN_NEXT'] . "</A>";
+        if ($body['displayAsPopup'] == 1) {
+            $output .= "        <A HREF=\"#\" onClick=\"window.close();\">". $lang['BTN_CLOSE'] ."</A>";
+        }
+        else {
+            $output .= "        <A HREF=\"". $body['FILE_LIST'] ."\">". $lang[BTN_LIST] ."</A>";
+        }
+        $output.= "                </TD>       
             </TR>
             <TR>
                 <TD>
                     <TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH=570>
                         <TR VALIGN=bottom
                             <TD CLASS=\"headTitle\">
-                            " . $body['$contact']['name'] . "
+                            \"" . $body['$contact']['name'] . "\"
                             </TD>
                             <TD CLASS=\"headText\" ALIGN=right>
         " . $body['HIDDENENTRY'] . "
-                                " . $body['spacer'] . "";
+                                ";
+        if($body['spacer'] == 0){
+            $output .= "<IMG SRC=\"spacer.gif\" WIDTH=1 HEIGHT=1 BORDER=0 ALT=\"\">/n";
+        }
         if ($body['r_groups'] != -1) {
             foreach ($body['r_groups'] as $tbl_groups) {
 
@@ -68,7 +74,12 @@ class addressTemplate{
                 <TD CLASS=\"infoBox\">
                     <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=10 WIDTH=540>
                         <TR VALIGN=\"top\">";
-        $output .= $body['tableColumnAmt'];
+        if($body['tableColumnAmt'] ==3) {
+            $output .= "                    <TD WIDTH=" . $body['picwidth'] . ">
+                        <IMG SRC=\"" . $body['picture'] . "\" WIDTH=" . $body['picwidth'] . " HEIGHT=" . $body['picheight'] . " BORDER=1 ALT=\"\">
+                </TD>";
+        }
+
         $output .= "	                    <TD WIDTH=" . $body['tableColumnWidth'] . " CLASS=\"data\">";
         //$output .= outputloop($body['address']);
         $output .= $body['address'];
@@ -78,25 +89,39 @@ class addressTemplate{
     `              </TD>
                    <td WIDTH=" . $body['tableColumnWidth'] . " CLASS=\"data\">
                     <P>\n<B>" . $lang['LBL_EMAIL'] . "</B>\n";
-        $output .= outputloop($body['addreemailsses']);
-        $output .= outputloop($body["otherphonecnt"]);
-        $output .= outputloop($body['message']);
+        $output .= outputloop($body['emails']);
+        $output .= outputloop($body["otherphonecnt"], $useBreak);
+        $output .= outputloop($body['message'], $useBreak);
         $output .= "		  </TD>
             </TR>
             <TR>
-                <TD COLSPAN=" . $body['tableColumnAmt2'] . "  CLASS=\"data\">
+                <TD COLSPAN=" . $body['tableColumnAmt'] . "  CLASS=\"data\">
                      <TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH=540>
-                       " . $body["birthday"];
-        $output .= outputloop($body['additional']);
-        $output .= outputloop($body['Websites']);
-
-        $output .= "		   </TABLE>
+                       ";
+        if($body["birthday"]){
+            $output .="                 <tr VALIGN=\"top\">\
+               <td WIDTH=120 CLASS=\"data\">
+                    <b>". $lang['LBL_BIRTHDATE'] ."</b>
+                </td>
+               <td WIDTH=440 CLASS=\"data\"> ". $body["birthday"] ."</td>
+             </tr>";
+        }
+        $output .= $this->addtionalNotes($body);
+        $output .= "                 <TR VALIGN=\"top\">
+                       <td WIDTH=120 CLASS=\"data\">
+                            <b>". $lang[LBL_WEBSITES] ."</b>
+                       </td>
+                       <TD WIDTH=440 CLASS=\"data\">\n";
+        $output .= $this->getWebsiteUrl($body['Websites']);
+        $output .= "                   </TD>
+                     </TR>
+                    </TABLE>
                  </TD>
             </TR>";
 
         if ($body['note']) {
             $output .= "         <TR>
-                      <TD COLSPAN=" . $body['tableColumnAmt2'] . " CLASS=\"data\">
+                      <TD COLSPAN=" . $body['tableColumnAmt'] . " CLASS=\"data\">
                          <b>" . $body['LBL_NOTES'] . "</b>
                          <br />
                          " . $body['note'] . "
@@ -213,5 +238,31 @@ class addressTemplate{
         return "<BR><A HREF=\"" . $body['FILE_ADDRESS'] . "?id=". $contact['id'] ."\"$popupLink>". $contact['fullname'] ."</A>\n";
     }
 
+    private function addtionalNotes($body){
+        $output ="";
+        if($body['r_additionalData'] != -1) {
+            foreach ($body['r_additionalData'] as $tbl_additionalData) {
+                $output .= "                 <tr VALIGN=\"top\">
+               <td WIDTH=120 CLASS=\"data\">
+                    <b>" . stripslashes($tbl_additionalData['type']) . "</b>
+               </td>
+               <td WIDTH=440 CLASS=\"data\">
+                    " . stripslashes($tbl_additionalData['value']) . "
+                </td>
+             </tr>";
+            }
+        }
+        return $output;
+    }
+
+    private function getWebsiteUrl($body){
+        $output = "";
+        if ($body['$r_websites'] != -1) {
+            foreach($body['$r_websites'] as $tbl_websites){
+                $output .="                      <br><a href=\"". stripslashes( $tbl_websites['webpageURL'] ) ."\">
+            ". ($tbl_websites['webpageName'])? stripslashes( $tbl_websites['webpageName'] ) : stripslashes( $tbl_websites['webpageURL'] ) ."</a>";
+            }
+        }
+    }
 
 }
