@@ -1,12 +1,12 @@
 <?php
 /*************************************************************
- *  THE ADDRESS BOOK  :  version 1.2
+ *  THE ADDRESS BOOK  :  version 1.2.01
  *
  * Author: stimepy@aodhome.com
- * Last Modified: 4-13-2022
+ * Last Modified: 5-05-2022
  ****************************************************************
  *  class-birthday.php
- *  Birthday stuff?
+ *  Birthday stuff
  *
  *************************************************************/
 // NOT DONE.
@@ -43,32 +43,12 @@ class Birthday
 
     public function GetBirthday($options, $lang, $file_address)
     {
-
         $r_bday = $this->getBirthdayData($options->bdayInterval());
         $body['langbirth'] = $lang['BIRTHDAY_UPCOMING1'] . $options->bdayInterval() . $lang['BIRTHDAY_UPCOMING2'];
-        $x = 0;
+
         if($r_bday != -1) {
-            foreach ($r_bday as $tbl_birthday) {
-                $this->fillInBirthday($tbl_birthday, $options, $lang, $file_address, $x, $body);
-            }
+            return $r_bday;
         }
-
-    }
-
-    private function fillInBirthday($tbl_birthday, $options, $lang, $file_address, $x,$body){
-            $age = ($tbl_birthday['year'] > 0) ? "                    <TD CLASS=\"listEntry\">                       " . $tbl_birthday['age'] . " yrs                    </TD>" : "                    <TD CLASS=\"listEntry\">&nbsp;</TD>";
-            $year = ($tbl_birthday['year'] > 0) ? ", " . $tbl_birthday['year'] : "";
-            if ($options->getdisplayAsPopup() == 1) {
-                $popupLink = " onClick=\"window.open('" . $file_address . "?id=" . $tbl_birthday['id'] . "','addressWindow','width=600,height=450,scrollbars,resizable,menubar,status'); return false;\" ";
-            }
-
-            $body['bithinfo'][$x] = "                  <tr>
-                <TD CLASS=\"listEntry\"><A HREF=\"" . $file_address . "?id=" . $tbl_birthday['id'] . "\"" . $popupLink . ">" . stripslashes($tbl_birthday['fullname']) . "</A></TD>
-                <TD CLASS=\"listEntry\">
-                    " . $tbl_birthday['month'] . " " . $tbl_birthday['day'] . $year . "
-                </TD>
-        " . $age . "           
-              </TR>";
 
     }
 

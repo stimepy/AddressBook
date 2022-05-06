@@ -3,7 +3,7 @@
  *  THE ADDRESS BOOK  :  version 1.2.01
  *
  * Author: stimepy@aodhome.com
- * Last Modified: 4-28-2022
+ * Last Modified: 05-05-2022
  ****************************************************************
  *  Common.Template.php
  *  Common use HTML template
@@ -183,5 +183,33 @@ function ButtonUrl($label,$useURL = false, $url = null){
     return "<button class=\"urlButton\" type=\"". $type ."\"$theURL>". $label ."</button>";
 }
 
+/**
+ * @param $tbl_birthdays array
+ * @param $isPopUp int
+ * @param $file_address string
+ * @return string
+ */
+function fillInBirthday($tbl_birthdays, $isPopUp,  $file_address){
+    global $lang;
+    $output ="";
+    if(!empty($tbl_birthdays) && is_array($tbl_birthdays)) {
+        foreach ($tbl_birthdays as $tbl_birthday) {
+            $age = ($tbl_birthday['year'] > 0) ? "                    <td class=\"listEntry\">                       " . $tbl_birthday['age'] . " ". $lang['BIRTHDAY_YEAR_UNIT']."                    </td>" : "                    <td class=\"listEntry\">&nbsp;</td>";
+            $year = ($tbl_birthday['year'] > 0) ? ", " . $tbl_birthday['year'] : "";
+            if ($isPopUp == 1) {
+                $popupLink = " onClick=\"window.open('" . $file_address . "?id=" . $tbl_birthday['id'] . "','addressWindow','width=600,height=450,scrollbars,resizable,menubar,status'); return false;\" ";
+            }
+
+            $output .= "                  <tr>
+                    <td class=\"listEntry\"><a href=\"" . $file_address . "?id=" . $tbl_birthday['id'] . "\"" . $popupLink . ">" . stripslashes($tbl_birthday['fullname']) . "</a></td>
+                    <td CLASS=\"listEntry\">
+                        " . $tbl_birthday['month'] . " " . $tbl_birthday['day'] . $year . "
+                    </td>
+                    " . $age . "           
+                  </tr>";
+        }
+    }
+    return $output;
+}
 
 
